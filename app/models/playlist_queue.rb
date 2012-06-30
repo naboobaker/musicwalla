@@ -23,7 +23,7 @@ class PlaylistQueue < ActiveRecord::Base
 
   def broadcast(channel, data)
     message = {:channel => channel, :data => data}
-    uri = URI.parse("http://localhost:3000/faye")
+    uri = URI.parse("http://musicwalla.herokuapp.com/faye")
     Thread.new do
       Net::HTTP.post_form(uri, :message => message.to_json)
     end
