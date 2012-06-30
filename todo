@@ -1,0 +1,27 @@
+To Do
+=====
+
+Sourcecode
+- Make common code common in javascript - such as common dynamic table
+- audio_player.js is big and needs to be simplified/shortened
+- Change JS generated table bodies to generate full table (header/body/etc)
+
+Controllers
+- look into respond_with instead of respond_to
+- check "todo" comments
+
+All UI
+- Tooltips over buttons
+- Separate styling from HTML -> move to CSS
+- Use styling instead of BRs for spacing
+- Truncate names in tables if wider than column
+- Table row generation is clunky/hard-coded
+- Fixed column widths - right now, they dynamicaly change width based on content
+
+Main page
+- Good style/UI for main page's current playlist/song
+
+Playlist Editor
+- Find better way to generate song form to bind to Rails forms, i.e., using hard-coded "song[song_attribute][x][name]" seems clunky
+- When deleting a song, need to properly update x in song[song_attribute][x][name]/[id]/[location]
+- Navigating on Back button from Playlist edit page, back to Playlist Manage page - list of Playlists is sometimes stale

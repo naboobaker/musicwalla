@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="span4 offset1">
+      <h1>Playlist</h1>
+   </div>
+</div>
+
+<br>
+<br>
+
+<%= form_for(@playlist) do |f| %>
+  <div class="row">
+    <div class="span4 offset1">
+      <fieldset>
+        <div class="control-group">
+          <%= f.label :name, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_field :name, :class => "input-xlarge" %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <%= f.label :uuid, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_field :uuid, :class => "input-xlarge" %>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="row">
+    <div class="span2 offset1">
+      <br>
+      <%= link_to_function '<i class="icon-plus icon-white"></i> Add Song'.html_safe,
+          "playlistSongs_createSong(#{@playlist.id})", 
+          :class => "btn btn-primary",
+          :style => "color: white;"
+          %>
+     </div>
+        <div class="span8">
+          <script>
+            initPlaylistSongs();
+          </script>
+          <table class="table table-striped" id="playlist_songs">
+            <thead>
+              <th>Track#</th>
+              <th width="30%">Name</th>
+              <th width="50%">URL</th>
+              <th></th>
+            </thead>
+            <tbody id="<%= @playlist.id %>">
+            </tbody>
+          </table>
+        </div>
+  </div>
+
+  <div class="row">
+    <div class="span11 offset1">
+      <div class="actions form-actions">
+        <%= f.submit "Save Changes" %>
+      </div>
+    </div>
+  </div>
+<% end %>

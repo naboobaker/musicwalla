@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MusicWalla</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application", root_url + "faye.js" %>
+  <%= csrf_meta_tags %>
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+    <a class="brand">MusicWalla</a>
+    <ul class="nav">
+      <li id="home_nav"><%= link_to "Home", root_path %></li>
+      <li id="manage_nav"><%= link_to "Manage", playlists_path %></li>
+    </ul>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+
+<div class="container">
+<%= yield %>
+</div>
+
+</body>
+</html>
