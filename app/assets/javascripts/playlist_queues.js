@@ -75,7 +75,7 @@ function playlistQueues_playlistQueuesCreate(playlistQueueId) {
 function playlistQueues_playlistQueuesDestroy(playlistQueueId) {
     // since there are multiple ways to get to this method, need to make sure
     // the Playlist Queue is still in the table - it could have already been removed
-    var playlistQueue = $("#playlist_queues tbody #" + playlistQueueId);
+    var playlistQueue = $("#playlist_queues #" + playlistQueueId);
     if (playlistQueue.length > 0) {
         // remove deleted playlist_queue
         playlistQueue.remove();
