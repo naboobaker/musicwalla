@@ -41,7 +41,7 @@ function playlistQueues_renderTableRow(playlistQueueId, playlist) {
     $("#playlist_queues tbody tr.empty_row").remove();
 
     var rowCount = $("#playlist_queues tbody tr").length;
-    $("#playlist_queues tbody").append("<tr id=\"" + playlistQueueId +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
+    $("#playlist_queues tbody").append("<tr id=\"id" + playlistQueueId +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
 }
 
 function playlistQueues_renderActions(playlistQueueId) {
@@ -75,7 +75,7 @@ function playlistQueues_playlistQueuesCreate(playlistQueueId) {
 function playlistQueues_playlistQueuesDestroy(playlistQueueId) {
     // since there are multiple ways to get to this method, need to make sure
     // the Playlist Queue is still in the table - it could have already been removed
-    var playlistQueue = $("#playlist_queues tbody #" + playlistQueueId);
+    var playlistQueue = $("#playlist_queues tbody #id" + playlistQueueId);
     if (playlistQueue.length > 0) {
         // remove deleted playlist_queue
         playlistQueue.remove();
