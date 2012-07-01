@@ -41,7 +41,7 @@ function playlistQueues_renderTableRow(playlistQueueId, playlist) {
     $("#playlist_queues tbody tr.empty_row").remove();
 
     var rowCount = $("#playlist_queues tbody tr").length;
-    $("#playlist_queues tbody").append("<tr id=\"" + playlistQueueId +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
+    $("#playlist_queues tbody").append("<tr id=\"id" + playlistQueueId +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
 }
 
 function playlistQueues_renderActions(playlistQueueId) {
@@ -77,13 +77,15 @@ function playlistQueues_playlistQueuesDestroy(playlistQueueId) {
     var b = $("table#playlist_queues");
     var c = $("#playlist_queues tr");
     var d = $("table#playlist_queues tr");
-    var e = $("#playlist_queues #" + playlistQueueId);
-    var f = $("table#playlist_queues #" + playlistQueueId);
-    var g = $("#playlist_queues tr#" + playlistQueueId);
-    var h = $("table#playlist_queues tr#" + playlistQueueId);
+    var e = $("#playlist_queues #id" + playlistQueueId);
+    var f = $("table#playlist_queues #id" + playlistQueueId);
+    var g = $("#playlist_queues tr#id" + playlistQueueId);
+    var h = $("table#playlist_queues tr#id" + playlistQueueId);
+    var i = $("table#playlist_queues tbody tr#id" + playlistQueueId);
+
 
     // remove deleted playlist_queue
-    $("#playlist_queues #" + playlistQueueId).remove();
+    $("#playlist_queues #id" + playlistQueueId).remove();
 
     // update row numbers, since a middle row could have been deleted
     $("#playlist_queues tbody tr").each(function() {
