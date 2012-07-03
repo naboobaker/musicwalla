@@ -28,7 +28,7 @@ function playlistQueues_renderView() {
 
 function playlistQueues_renderTable(playlistQueues) {
     // clear the table and add everything in the playlist_queues[] array to the table
-    $("#playlist_queues tbody tr").remove();
+    $("#" + getQueueTableId() + " tbody tr").remove();
     for (i = 0; i < playlistQueues.length; i++) {
         playlistQueues_renderTableRow(playlistQueues[i].id, playlistQueues[i].playlist);
     }
@@ -38,10 +38,10 @@ function playlistQueues_renderTable(playlistQueues) {
 
 function playlistQueues_renderTableRow(playlistQueueId, playlist) {
     // adding a row to the playlist_queues table, so remove the "empty table" message if it exists
-    $("#playlist_queues tbody tr.empty_row").remove();
+    $("#" + getQueueTableId() + " tbody tr.empty_row").remove();
 
-    var rowCount = $("#playlist_queues tbody tr").length;
-    $("#playlist_queues tbody").append("<tr id=\"id" + playlistQueueId +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
+    var rowCount = $("#" + getQueueTableId() + " tbody tr").length;
+    $("#" + getQueueTableId() + " tbody").append("<tr id=\"" + getQueueRowId(playlistQueueId) +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"playlist_name\">" + playlist.name + "</td><td class=\"playlist_length\">" + playlist.songs.length + "</td><td>" + playlistQueues_renderActions(playlistQueueId) + "</td></tr>");
 }
 
 function playlistQueues_renderActions(playlistQueueId) {
@@ -52,11 +52,11 @@ function playlistQueues_renderActions(playlistQueueId) {
     return remove;
 }
 function playlistQueues_renderTableEmptyMessage() {
-    var rowCount = $("#playlist_queues tbody tr").length;
+    var rowCount = $("#" + getQueueTableId() + " tbody tr").length;
 
     // if there is nothing in the table, give a friendly message indicating an empty table
     if (rowCount == 0) {
-        $("#playlist_queues tbody").append("<tr class=\"empty_row\"><td colspan=\"4\">Queue is empty.</td></tr>");
+        $("#" + getQueueTableId() + " tbody").append("<tr class=\"empty_row\"><td colspan=\"4\">Queue is empty.</td></tr>");
     }
 }
 
@@ -75,13 +75,13 @@ function playlistQueues_playlistQueuesCreate(playlistQueueId) {
 function playlistQueues_playlistQueuesDestroy(playlistQueueId) {
     // since there are multiple ways to get to this method, need to make sure
     // the Playlist Queue is still in the table - it could have already been removed
-    var playlistQueue = $("#playlist_queues tbody #id" + playlistQueueId);
+    var playlistQueue = $("#" + getQueueTableId() + " tbody #" + getQueueRowId(playlistQueueId));
     if (playlistQueue.length > 0) {
         // remove deleted playlist_queue
         playlistQueue.remove();
 
         // update row numbers, since a middle row could have been deleted
-        $("#playlist_queues tbody tr").each(function() {
+        $("#" + getQueueTableId() + " tbody tr").each(function() {
             $this = $(this)
             var row = $this[0].rowIndex;
             $this.find("td.row_number").html(row);
@@ -89,4 +89,12 @@ function playlistQueues_playlistQueuesDestroy(playlistQueueId) {
 
         playlistQueues_renderTableEmptyMessage();
     }
+}
+
+function getQueueTableId() {
+    return "playlist-queues";
+}
+
+function getQueueRowId(playlistQueueId) {
+    return "playlist-queue-" + playlistQueueId;
 }
