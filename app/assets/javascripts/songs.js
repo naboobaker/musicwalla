@@ -11,7 +11,8 @@ function initPlaylistSongs() {
 
 function playlistSongs_renderView() {
     // the playlist ID is in the HTML - tbody's ID attribute
-    var playlistId = $("#playlist_songs tbody:first").attr("id");
+    var tbodyId = $("#" + getSongTableId() + " tbody:first").attr("id");
+    var playlistId = tbodyId.substring(getPlaylistPrefix().length, tbodyId.length);
 
     // get the playlist and then add the playlist's songs to the songs table
     getPlaylist(playlistId, function(data){
@@ -21,7 +22,7 @@ function playlistSongs_renderView() {
 
 function playlistSongs_renderTable(playlistId, songs) {
     // clear the songs table and add everything in the songs[] array to the table
-    $("#playlist_songs tbody tr").remove();
+    $("#" + getSongTableId() + " tbody tr").remove();
     for (i = 0; i < songs.length; i++) {
         playlistSongs_renderTableRow(playlistId, songs[i]);
     }
@@ -31,10 +32,10 @@ function playlistSongs_renderTable(playlistId, songs) {
 
 function playlistSongs_renderTableRow(playlistId, song) {
     // adding a row to the songs table, so remove the "empty table" message if it exists
-    $("#playlist_songs tbody tr.empty_row").remove();
+    $("#" + getSongTableId() + " tbody tr.empty_row").remove();
 
-    var rowCount = $("#playlist_songs tr").length;
-    $("#playlist_songs tbody" ).append("<tr id=\"" + song.id + "\"><td class=\"row_number\">" + rowCount + "</td><td><input style=\"width:100%\" name=\"playlist[songs_attributes][" + (rowCount - 1) + "][name]\" type=\"text\" value=\"" + song.name + "\"></td><td><input style=\"width:100%\" name=\"playlist[songs_attributes][" + (rowCount - 1) + "][url]\" type=\"text\" value=\"" + song.url + "\"></td><td>" + playlistSongs_renderActions(playlistId, song) + "<input name=\"playlist[songs_attributes][" + (rowCount - 1) + "][id]\" type=\"hidden\" value=\"" + song.id + "\"/></td></tr>");
+    var rowCount = $("#" + getSongTableId() + " tr").length;
+    $("#" + getSongTableId() + " tbody" ).append("<tr id=\"" + getSongRowId(song.id) + "\"><td class=\"row_number\">" + rowCount + "</td><td><input style=\"width:100%\" name=\"playlist[songs_attributes][" + (rowCount - 1) + "][name]\" type=\"text\" value=\"" + song.name + "\"></td><td><input style=\"width:100%\" name=\"playlist[songs_attributes][" + (rowCount - 1) + "][url]\" type=\"text\" value=\"" + song.url + "\"></td><td>" + playlistSongs_renderActions(playlistId, song) + "<input name=\"playlist[songs_attributes][" + (rowCount - 1) + "][id]\" type=\"hidden\" value=\"" + song.id + "\"/></td></tr>");
 }
 
 function playlistSongs_renderActions(playlistId, song) {
@@ -46,11 +47,11 @@ function playlistSongs_renderActions(playlistId, song) {
 }
 
 function playlistSongs_renderTableEmptyMessage() {
-    var rowCount = $("#playlist_songs tbody tr").length;
+    var rowCount = $("#" + getSongTableId() + " tbody tr").length;
 
     // if there is nothing in the table, give a friendly message indicating an empty table
     if (rowCount == 0) {
-        $("#playlist_songs tbody").append("<tr class=\"empty_row\"><td colspan=\"4\">Song list is empty.</td></tr>");
+        $("#" + getSongTableId() + " tbody").append("<tr class=\"empty_row\"><td colspan=\"4\">Song list is empty.</td></tr>");
     }
 }
 
@@ -64,10 +65,10 @@ function playlistSongs_createSong(playlistId) {
 function playlistSongs_deleteSong(songId) {
     deleteSong(songId, function(data){
         // remove deleted song from the table
-        $("#playlist_songs tbody #" + songId).remove();
+        $("#" + getSongTableId() + " tbody #" + getSongRowId(songId)).remove();
 
         // update row numbers, since a middle row could have been deleted
-        $("#playlist_songs tbody tr").each(function() {
+        $("#" + getSongTableId() + " tbody tr").each(function() {
             $this = $(this)
             var row = $this[0].rowIndex;
             $this.find("td.row_number").html(row);
@@ -75,4 +76,16 @@ function playlistSongs_deleteSong(songId) {
 
         playlistSongs_renderTableEmptyMessage();
     });
+}
+
+function getPlaylistPrefix() {
+    return "playlist-";
+}
+
+function getSongTableId() {
+    return "playlist-songs";
+}
+
+function getSongRowId(songId) {
+    return "playlist-song-" + songId;
 }
