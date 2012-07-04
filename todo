@@ -23,5 +23,4 @@ Main page
 
 Playlist Editor
 - Find better way to generate song form to bind to Rails forms, i.e., using hard-coded "song[song_attribute][x][name]" seems clunky
-- When deleting a song, need to properly update x in song[song_attribute][x][name]/[id]/[location]
 - Navigating on Back button from Playlist edit page, back to Playlist Manage page - list of Playlists is sometimes stale
