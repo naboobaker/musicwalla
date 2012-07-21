@@ -145,7 +145,7 @@ function playPlaylistSong(playlist, songIndex) {
         var audioPlayer = getAudioPlayer();
 
         // notify that song is starting to play
-        notifySongStarting(playlistId, songIndex);
+        notifySongStarting(playlistId, playlistSongs[songIndex].id);
 
         // add listeners
         audioPlayer.addEventListener("playing", audioPlaying, false);
@@ -227,8 +227,8 @@ function notifyPlaylistStarting(playlistId) {
     nowPlaying_playlistStarting(playlistId);
 }
 
-function notifySongStarting(playlistId, songIndex) {
-    nowPlaying_songStarting(playlistId, songIndex);
+function notifySongStarting(playlistId, songId) {
+    nowPlaying_songStarting(playlistId, songId);
 }
 
 //

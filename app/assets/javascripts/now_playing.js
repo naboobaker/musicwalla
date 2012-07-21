@@ -2,6 +2,9 @@
 // Now Playing functions
 //
 
+// all changes are done via model, table will automatically reflect model changes
+var nowPlayingModel;
+
 function initNowPlaying() {
     // render now playing once the document is loaded/ready
     $(document).ready(function(){
@@ -12,56 +15,38 @@ function initNowPlaying() {
 function nowPlaying_renderView() {
     $("li#home_nav").addClass("active");
 
-    nowPlaying_renderTableEmptyMessage();
+    nowPlayingModel = new MusicWallaTableModel(["Track Name"]);
+    var table = new MusicWallaTable(nowPlayingModel, getPlayingTableId(), function(id) { return ""}, "No current playlist.");
 }
 
-function nowPlaying_renderTable(playlist) {
-    var playlistName = playlist.name;
-    var playlistSongs = playlist.songs;
-
-    $("#" + getPlayingTableId() + " tbody tr").remove();
-
-    for (i = 0; i < playlistSongs.length; i++) {
-        nowPlaying_renderTableRow(playlistSongs[i]);
+function nowPlaying_createTable(playlist) {
+    // clear previous playlist from model
+    while (nowPlayingModel.getRowCount() > 0) {
+        var id = nowPlayingModel.getIdAt(0);
+        nowPlayingModel.removeRow(id);
     }
 
-    nowPlaying_renderTableEmptyMessage();
-}
-
-function nowPlayling_resetTable() {
-    $("#" + getPlayingTableId() + " tbody tr").remove();
-    nowPlaying_renderTableEmptyMessage();
-}
-
-function nowPlaying_renderTableRow(playlistSong) {
-    $("#" + getPlayingTableId() + " tbody tr.empty_row").remove();
-
-    var rowCount = $("#" + getPlayingTableId() + " tbody tr").length;
-    $("#" + getPlayingTableId() + " tbody").append("<tr id=\"" + getPlayingRowId(rowCount) +"\"><td class=\"row_number\">" + (rowCount + 1) + "</td><td class=\"song_name\">" + playlistSong.name + "</td></tr>");
-}
-
-function nowPlaying_renderTableEmptyMessage() {
-    var rowCount = $("#" + getPlayingTableId() + " tbody tr").length;
-
-    if (rowCount == 0) {
-        $("#" + getPlayingTableId() + " tbody").append("<tr class=\"empty_row\"><td colspan=\"2\">No current playlist.</td></tr>");
+    // add new playlist to model
+    for (var i = 0; i < playlist.songs.length; i++) {
+        nowPlayingModel.addRow(playlist.songs[i].id, [playlist.songs[i].name]);
     }
 }
 
 function nowPlaying_playlistStarting(playlistId) {
-    getPlaylist(playlistId, nowPlaying_renderTable);
+    getPlaylist(playlistId, nowPlaying_createTable);
 }
 
-function nowPlaying_songStarting(playlistId, songIndex) {
+function nowPlaying_songStarting(playlistId, songId) {
+    // tood - fix:
+    // occaisionally, the call to nowPlaying_createTable(...) occurs after this function is called
+    // this is probably due to the aysnchoronous nature of these function calls
+    // as a result, the current track does highlight properly, since the table does not yet exist
+
     // highlight the row - set text to bold
     $("#" + getPlayingTableId() + " tbody tr td").css("font-weight", "");
-    $("#" + getPlayingTableId() + " tbody tr#" + getPlayingRowId(songIndex) + " td").css("font-weight", "bold");
+    $("#" + getPlayingTableId() + " tbody tr#" + getPlayingTableId() + "-row-" + songId + " td").css("font-weight", "bold");
 }
 
 function getPlayingTableId() {
     return "now-playing";
-}
-
-function getPlayingRowId(row) {
-    return "now-playing-" + row;
 }
