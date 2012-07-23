@@ -13,23 +13,28 @@
  - tableId: The ID, as a string, of the <table> element to populate, the header
         and row information will be populated.
 
- - actionRenderer: The function that will be called when a row's actions need to
-        be rendered (e.g., delete, edit, etc.). The rendering function takes an
-        id, returns an html snippet.
-
  - emptyMessage: The message, as a string, to render on the table when there
-        are now rows to display.
+        are no rows to display.
+
+ - renderers: Optional. The object containing functions that can be called when
+        rendering various cells in a row need rendering:
+        - renderers.cellRenderer(cellData): Optional.  Define this function
+            if the table's cell data needs special rendering.T he rendering
+            function takes the column number and cell data and returns an html
+            snippet.
+        - renderers.actionRenderer(rowId): Optional. Define this function if a
+            row needs actions (e.g., delete, edit, etc.) rendered. The actions
+            will be placed on the last column of a row. The rendering function
+            takes a row id and returns an html snippet.
 */
-function MusicWallaTable(model, tableId, actionRenderer, emptyMessage) {
+function MusicWallaTable(model, tableId, emptyMessage, renderers) {
     this.model = model;
     this.tableId = tableId;
-    this.actionRenderer = actionRenderer;
     this.emptyMessage = emptyMessage;
-
-    // make a copy of the columns, for table-use
-    this.columns = this.model.columns.slice(0);
+    this.columns = this.model.columns.slice(0); // make a copy of the columns, for table-use
     this.columns.splice(0,0, ""); // column for row number
-    this.columns.push(""); // column for row actions
+
+    this.initRenderers(renderers);
 
     // model change listener
     var listener = new Object();
@@ -46,6 +51,27 @@ function MusicWallaTable(model, tableId, actionRenderer, emptyMessage) {
     // populate the table
     this.createTable();
     this.tableChanged();
+}
+
+/*
+ Internal function to initialize table/cell renderers.
+*/
+MusicWallaTable.prototype.initRenderers = function(renderers) {
+
+    // use the specified cellRender(), otherwise create a default one
+    if (renderers && renderers.cellRenderer) {
+        this.cellRenderer = renderers.cellRenderer;
+    }
+    else {
+        this.cellRenderer = function(columnNumber, cellData) {
+            return cellData;
+        }
+    }
+
+    if (renderers && renderers.actionRenderer) {
+        this.actionRenderer = renderers.actionRenderer;
+        this.columns.push(""); // if there's an action renderer, add a column for the actions
+    }
 }
 
 /*
@@ -68,7 +94,7 @@ MusicWallaTable.prototype.createTable = function() {
     for (var i = 0; i < this.model.getRowCount(); i++) {
         var row = this.model.getRowAt(i);
         var id =  this.model.getIdAt(i);
-        this.addRow(id, row, this.actionRenderer, this.tableId);
+        this.addRow(id, row);
     }
 }
 
@@ -77,6 +103,7 @@ MusicWallaTable.prototype.createTable = function() {
 */
 MusicWallaTable.prototype.addRow = function(id, row) {
     var actionRenderer = this.actionRenderer;
+    var cellRenderer = this.cellRenderer;
     var tableId = this.tableId;
 
     // create the row
@@ -85,11 +112,16 @@ MusicWallaTable.prototype.addRow = function(id, row) {
 
     // create the table cells in the row
     var bodyRow = $("#" + tableId + " tbody tr#" + tableId + "-row-" + id);
+    
     bodyRow.append("<td id=\"row-number\"></td>") // row number
+
     for (var i = 0; i < row.length; i++) {
-        bodyRow.append("<td>" + row[i] + "</td>")
+        bodyRow.append("<td>" + cellRenderer(i, row[i]) + "</td>") // row cell data
     }
-    bodyRow.append("<td>" + actionRenderer(id) + "</td>") // actions
+
+    if (actionRenderer) {
+        bodyRow.append("<td>" + actionRenderer(id) + "</td>") // row actions
+    }
 
     this.tableChanged();
 }

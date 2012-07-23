@@ -27,7 +27,8 @@ function playlists_createTable(playlists) {
         playlists_addRow(playlists[i]);
     }
 
-    var table = new MusicWallaTable(playlistModel, "playlists", playlists_renderActions, "No playlists defined.");
+    var renderers = {actionRenderer: playlists_renderActions};
+    var table = new MusicWallaTable(playlistModel, "playlists", "No playlists defined.", renderers);
 }
 
 function playlists_addRow(playlist) {

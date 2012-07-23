@@ -29,7 +29,6 @@
   </div>
 
   <br>
-  <br>
 
   <div class="row">
     <div class="span2 offset1">
@@ -40,21 +39,18 @@
           :style => "color: white;"
           %>
      </div>
-        <div class="span8">
-          <script>
-            initPlaylistSongs();
-          </script>
-          <table class="table table-striped" id="playlist-songs">
-            <thead>
-              <th>Track#</th>
-              <th width="30%">Name</th>
-              <th width="50%">URL</th>
-              <th></th>
-            </thead>
-            <tbody id="playlist<%= @playlist.id %>">
-            </tbody>
-          </table>
-        </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="span10 offset1">
+      <script>
+        initPlaylistSongs(<%= @playlist.id %>);
+      </script>
+      <table class="table table-striped" id="playlist-songs">
+      </table>
+    </div>
   </div>
 
   <div class="row">

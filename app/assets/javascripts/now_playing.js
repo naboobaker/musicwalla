@@ -16,7 +16,7 @@ function nowPlaying_renderView() {
     $("li#home_nav").addClass("active");
 
     nowPlayingModel = new MusicWallaTableModel(["Track Name"]);
-    var table = new MusicWallaTable(nowPlayingModel, getPlayingTableId(), function(id) { return ""}, "No current playlist.");
+    var table = new MusicWallaTable(nowPlayingModel, getPlayingTableId(), "No current playlist.");
 }
 
 function nowPlaying_createTable(playlist) {

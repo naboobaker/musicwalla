@@ -36,7 +36,8 @@ function playlistQueues_createTable(playlistQueues) {
         playlistQueues_addRow(playlistQueues[i].id, playlistQueues[i].playlist);
     }
 
-    var table = new MusicWallaTable(playlistQueueModel, "playlist-queues", playlistQueues_renderActions, "Queue is empty.");
+    var renderers = {actionRenderer: playlistQueues_renderActions};
+    var table = new MusicWallaTable(playlistQueueModel, "playlist-queues", "Queue is empty.", renderers);
 }
 
 function playlistQueues_addRow(playlistQueueId, playlist) {
