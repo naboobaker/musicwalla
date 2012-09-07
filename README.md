@@ -2,7 +2,7 @@ MusicWalla
 ==========
 
 MusicWalla is a demo of NFC tag technology, HTML5 audio, and asynchronous
-events.
+events. It's my first forrway into web technologies.
 
 When an NFC tag is tapped on a pre-configured reader, the reader will do an 
 HTTP POST request to /enqueue and send the UUID of the NFC tag as a parameter
